@@ -1,0 +1,24 @@
+[submodule "api-gateway"]
+path = api-gateway
+url = https://github.com/playermaker-task/api-gateway.git
+[submodule "config-service"]
+path = config-service
+url = https://github.com/playermaker-task/config-service.git
+[submodule "count-service"]
+path = count-service
+url = https://github.com/playermaker-task/count-service.git
+[submodule "duplicate-removal-service"]
+path = duplicate-removal-service
+url = https://github.com/playermaker-task/duplicate-removal-service.git
+[submodule "facade-service"]
+path = facade-service
+url = https://github.com/playermaker-task/facade-service.git
+[submodule "response-service"]
+path = response-service
+url = https://github.com/playermaker-task/response-service.git
+[submodule "save-to-db-service"]
+path = save-to-db-service
+url = https://github.com/playermaker-task/save-to-db-service.git
+[submodule "top-players-service"]
+path = top-players-service
+url = https://github.com/playermaker-task/top-players-service.git
