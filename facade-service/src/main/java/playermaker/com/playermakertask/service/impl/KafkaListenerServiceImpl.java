@@ -1,7 +1,7 @@
 package playermaker.com.playermakertask.service.impl;
 
 import playermaker.com.playermakertask.dto.PlayerTopResponse;
-import playermaker.com.playermakertask.service.KafkaListenerService;
+import playermaker.com.playermakertask.listener.KafkaListenerService;
 import playermaker.com.playermakertask.controller.WebSocketController;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class KafkaListenerServiceImpl implements KafkaListenerService {
 
     @Autowired
-    private RedisTemplate<String, PlayerTopResponse> redisTemplate;
+    private RedisTemplate<String, PlayerTopResponse> playerTopResponseRedisTemplate;
 
     @Autowired
     private WebSocketController webSocketController;
@@ -23,10 +23,7 @@ public class KafkaListenerServiceImpl implements KafkaListenerService {
     @Override
     @KafkaListener(topics = "player.response.final", groupId = "response-group")
     public void listenFinalResponse(ConsumerRecord<String, PlayerTopResponse> record) {
-        // Сохранение результата в Redis
-        redisTemplate.opsForValue().set(record.key(), record.value(), 1, TimeUnit.HOURS);
-
-        // Отправка уведомления клиенту через WebSocket
+        playerTopResponseRedisTemplate.opsForValue().set(record.key(), record.value(), 1, TimeUnit.HOURS);
         webSocketController.sendResult(record.key(), record.value());
     }
 }

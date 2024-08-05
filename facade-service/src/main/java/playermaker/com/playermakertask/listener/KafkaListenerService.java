@@ -1,4 +1,4 @@
-package playermaker.com.playermakertask.service;
+package playermaker.com.playermakertask.listener;
 
 import playermaker.com.playermakertask.dto.PlayerTopResponse;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

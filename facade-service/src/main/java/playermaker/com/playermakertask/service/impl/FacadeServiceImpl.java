@@ -11,7 +11,6 @@ import playermaker.com.playermakertask.service.FacadeService;
 
 import java.util.UUID;
 
-
 @Service
 public class FacadeServiceImpl implements FacadeService {
 
@@ -19,25 +18,23 @@ public class FacadeServiceImpl implements FacadeService {
     private KafkaTemplate<String, PlayerRequest> kafkaTemplate;
 
     @Autowired
-    private RedisTemplate<String, PlayerTopResponse> redisTemplate;
+    private RedisTemplate<String, PlayerTopResponse> playerTopResponseRedisTemplate;
+
+    @Autowired
+    private RedisTemplate<String, Object> generalRedisTemplate;
 
     @Override
     public ResponseEntity<String> processGameData(PlayerRequest request) {
-        // Валидация входных данных
         validateRequest(request);
-
-        // Генерация уникального ID для запроса
         String requestId = UUID.randomUUID().toString();
-
-        // Отправка данных в Kafka
+        generalRedisTemplate.opsForValue().set(requestId + ":request", request);
         kafkaTemplate.send("player.participation.raw", requestId, request);
-
         return ResponseEntity.accepted().body(requestId);
     }
 
     @Override
     public ResponseEntity<PlayerTopResponse> getResult(String requestId) {
-        PlayerTopResponse response = redisTemplate.opsForValue().get(requestId);
+        PlayerTopResponse response = playerTopResponseRedisTemplate.opsForValue().get(requestId);
         if (response != null) {
             return ResponseEntity.ok(response);
         } else {
